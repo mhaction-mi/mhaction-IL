@@ -1,0 +1,12 @@
+name: illinois_map_app
+title:
+username: kajana
+account: kajana
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17057255
+bundleId: 11805303
+url: https://kajana.shinyapps.io/illinois_map_app/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
