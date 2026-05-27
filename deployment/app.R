@@ -18,8 +18,10 @@ house_districts <- read_sf("data/house.geojson") %>%
 senate_districts <- read_sf("data/senate.geojson") %>% 
   st_transform(4326)
 
-mhvillage_df <- read_csv("data/MHvillage_IL_addedDistricts_addedHomeRuleMunicipalities.csv")
+mhvillage_df <- read_csv("data/MHvillage_IL_addedDistricts.csv")
+mhvillage_homeRule_df <- read_csv("data/MHvillage_IL_addedDistricts_addedHomeRuleMunicipalities.csv")
 mhvillage_df$Number_of_Sites <- as.integer(mhvillage_df$Number_of_Sites)
+mhvillage_homeRule_df$Number_of_Sites <- as.integer(mhvillage_homeRule_df$Number_of_Sites)
 
 # make infographic tab with total site by county
 build_infographics1 <- function(mhvillage_df) {
@@ -395,8 +397,13 @@ server <- function(input, output, session) {
     req(input$main_category != "")
     target_col <- col_map[input$main_category]
     
+    use_df <- mhvillage_df
+    if (target_col == "HomeRuleMunicipality"){
+      use_df <- mhvillage_homeRule_df
+    }
+    
     # Get unique values from the correct column
-    subcategory_choices <- sort(unique(mhvillage_df[[target_col]]))
+    subcategory_choices <- sort(unique(use_df[[target_col]]))
     
     # Update the dropdown
     updateSelectInput(session, "sub_category", choices = subcategory_choices)
@@ -412,8 +419,14 @@ server <- function(input, output, session) {
     req(input$main_category,input$sub_category)
 
     target_col <- col_map[input$main_category]
+    
+    use_df <- mhvillage_df
+    
+    if (target_col == "HomeRuleMunicipality"){
+      use_df <- mhvillage_homeRule_df
+    }
 
-    df <- mhvillage_df %>%
+    df <- use_df %>%
       filter(!!sym(target_col) == (input$sub_category)) %>%
       select(Name, 'Number of Sites' = Number_of_Sites, 'Address' = full_address) %>%
       arrange(desc('Number of Sites'))
