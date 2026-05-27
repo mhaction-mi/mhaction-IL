@@ -201,7 +201,8 @@ ui <- navbarPage(
         column(
           width = 4,
           wellPanel(
-            selectInput("main_category", "Select a Geographic Boundary Type (NOTE - Selecting Home Rule Municipality may show incomplete or inaccurate results) :", choices = c("","County", "House District", "Senate District", "Home Rule Municipality")),
+            selectInput("main_category", "Select a Geographic Boundary Type:\
+                        *Some MHCs may be included in several or no Home Rule Municipalities!*", choices = c("","County", "House District", "Senate District", "Home Rule Municipality")),
             uiOutput("sub_category_ui"),
             h6("Site List Summary"),
             tableOutput("site_list_summary"),
